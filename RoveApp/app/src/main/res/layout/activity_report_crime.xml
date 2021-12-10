@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_width="match_parent"
     android:orientation="vertical"
     tools:context=".ReportCrimeActivity">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="200dp">
@@ -18,10 +23,12 @@
     </LinearLayout>
 
 
+
+
     <EditText
         android:id="@+id/editText"
         android:layout_width="323dp"
-        android:layout_height="143dp"
+        android:layout_height="70dp"
         android:layout_gravity="center"
         android:layout_marginTop="60dp"
         android:gravity="top"
@@ -35,16 +42,17 @@
         android:text="Select Level"
         android:textColor="@color/black"
         android:textSize="25dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         android:layout_marginLeft="30dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         android:orientation="horizontal"
         >
     <RadioGroup
+        android:id="@+id/rg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="3"
@@ -81,10 +89,11 @@
         android:layout_width="111dp"
         android:layout_height="63dp"
         android:layout_gravity="center"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="30dp"
         android:backgroundTint="@color/black"
         android:text="Report"
         android:textSize="18dp"
         />
 
 </LinearLayout>
+</ScrollView>

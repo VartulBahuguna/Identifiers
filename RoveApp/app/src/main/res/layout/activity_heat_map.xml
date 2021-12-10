@@ -39,17 +39,30 @@
         android:focusable="true"
         app:srcCompat="@drawable/ic_add" />
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/idSearchView"
-            android:layout_width="match_parent"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/pie_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:background="#BFBFBF"
-            android:elevation="5dp"
-            app:iconifiedByDefault="false"
-            app:queryHint="Search Here" />
+            android:clickable="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="50dp"
+            android:layout_marginLeft="30dp"
+            android:focusable="true"
+            app:srcCompat="@drawable/ic_baseline_pie_chart_24" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/bar_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="50dp"
+            android:layout_marginLeft="120dp"
+            android:focusable="true"
+            app:srcCompat="@drawable/ic_baseline_bar_chart_24" />
+
     </RelativeLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
 

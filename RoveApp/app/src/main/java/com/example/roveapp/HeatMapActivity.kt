@@ -1,13 +1,18 @@
 package com.example.roveapp
 
 import android.content.Intent
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.drawerlayout.widget.DrawerLayout
+import com.chaquo.python.Python
+import com.chaquo.python.android.AndroidPlatform
 import com.example.roveapp.databinding.ActivityHeatMapBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -22,6 +27,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.maps.android.heatmaps.HeatmapTileProvider
 import com.google.maps.android.heatmaps.WeightedLatLng
 import org.json.JSONArray
+import java.io.IOException
 
 
 class HeatMapActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -31,13 +37,29 @@ class HeatMapActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var btn: FloatingActionButton
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var marker: Marker
+    private lateinit var searchView: SearchView
+    private lateinit var pieBtn : FloatingActionButton
+    private lateinit var barBtn : FloatingActionButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val searchView = findViewById<SearchView>(R.id.idSearchView)
 
         binding = ActivityHeatMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
         btn = binding.addButton
+        pieBtn = binding.pieButton
+        barBtn = binding.barButton
+        //searchView = binding.idSearchView
+        if (! Python.isStarted()) {
+            Python.start( AndroidPlatform(this))
+        }
+//        getPythonHelloWorld()
+
+        barBtn.setOnClickListener{
+            startActivity(Intent(this, BarChart::class.java))
+        }
+        pieBtn.setOnClickListener{
+            startActivity(Intent(this, PieChart::class.java))
+        }
         btn.setOnClickListener{
             val intent = Intent(this, ReportCrimeActivity::class.java)
             startActivity(intent)
@@ -50,11 +72,12 @@ class HeatMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        navView.setNavigationItemSelectedListener {
+
+        navView.setNavigationItemSelectedListener() {
             when(it.itemId){
                 R.id.nav_home -> Toast.makeText(applicationContext,"Clicked Home",Toast.LENGTH_SHORT).show()
                 R.id.duty_sch -> Toast.makeText(applicationContext,"Duty Schedule",Toast.LENGTH_SHORT).show()
-                R.id.crime_identify -> Toast.makeText(applicationContext,"Crime Identification ",Toast.LENGTH_SHORT).show()
+                R.id.crime_identify -> startActivity(Intent(this, PieChart::class.java))
                 R.id.crime_list -> Toast.makeText(applicationContext,"Crime List",Toast.LENGTH_SHORT).show()
                 R.id.nav_share -> Toast.makeText(applicationContext,"Clicked Share",Toast.LENGTH_SHORT).show()
                 R.id.nav_logout -> Toast.makeText(applicationContext,"Clicked Logout",Toast.LENGTH_SHORT).show()
@@ -88,7 +111,7 @@ class HeatMapActivity : AppCompatActivity(), OnMapReadyCallback {
         val data = ArrayList<WeightedLatLng>()
 
         // call our function which gets json data from our asset file
-        val jsonData = getJsonDataFromAsset("myv54-l7rfd.json")
+        val jsonData = getJsonDataFromAsset("jipi8-scuu8.json")
 
         // ensure null safety with let call
         jsonData?.let {
@@ -96,22 +119,20 @@ class HeatMapActivity : AppCompatActivity(), OnMapReadyCallback {
             for (i in 0 until it.length()) {
                 // parse each json object
                 val entry = it.getJSONObject(i)
-                val lat = entry.getDouble("latitude1")
-                val lon = entry.getDouble("longitude1")
-                //val density = entry.getDouble("density")
+                val lat = entry.getDouble("Latitude")
+                val lon = entry.getDouble("Longitude")
                 val weightedLatLng = WeightedLatLng(LatLng(lat, lon))
                 data.add(weightedLatLng)
-                // optional: remove edge cases like 0 population density values
-                /*if (density != 0.0) {
-                    val weightedLatLng = WeightedLatLng(LatLng(lat, lon), density)
-                    data.add(weightedLatLng)
-                }*/
             }
         }
 
         return data
     }
-
+    private fun getPythonHelloWorld(): String {
+        val python = Python.getInstance()
+        val pythonFile = python.getModule("visual")
+        return pythonFile.callAttr("new_frame").toString()
+    }
     fun heat(googleMap: GoogleMap){
         val data = generateHeatMapData()
         val heatMapProvider = HeatmapTileProvider.Builder()
